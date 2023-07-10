@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserRoleController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Middleware\CheckMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 
@@ -34,6 +35,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/users/delete',[UserController::class, 'destroy']);
     Route::get('/products',[ProductController::class, 'index']);
     Route::get('/products/show/{id}',[ProductController::class, 'show']);
+    Route::post('/products/search/{id}',[ProductController::class, 'search']);
+    Route::post('/products/filterprice',[ProductController::class, 'FilterPrice']);
+    Route::post('/order/addOrder',[OrderController::class, 'addOrder']);
     Route::prefix('admin')->middleware('admin')->group(function (){
         Route::post('/role/create',[RoleController::class, 'addRole']);
         Route::post('/userroles/add/{uid}/{rid}',[UserRoleController::class, 'addUserRole']);

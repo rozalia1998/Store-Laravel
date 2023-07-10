@@ -121,4 +121,18 @@ class ProductController extends Controller
 
         return $this->SuccessResponse('Deleted Product Successfully');
     }
+
+    public function search(Request $request,$subcat){
+        $scat=SubCategory::findOrFail($subcat);
+        $product=Product::where('subcat_id',$scat->id)->where('name','like','%'.$request->name.'%')->get();
+
+        return $this->apiResponse($product,'About this product',200);
+
+    }
+
+    public function FilterPrice(Request $request){
+        $product=Product::where('price','>',$request->min)->where('price','<',$request->max)->get();
+        return $this->apiResponse($product,'Filter About Price',200);
+    }
+
 }
