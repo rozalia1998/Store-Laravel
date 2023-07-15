@@ -14,14 +14,10 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $cat1=Category::create([
-            [
-            'name'=>'Clothes'
-            ],[
-            'name'=>'Electronics'
-            ],[
-                'name'=>'Shoes'
-            ]
+        Category::insert([
+            ['name'=>'Clothes'],
+            ['name'=>'Electronics'],
+            ['name'=>'Shoes']
         ]);
 
 

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
+use App\Http\Resources\OrderResource;
 
 class OrderController extends Controller
 {
@@ -25,6 +26,7 @@ class OrderController extends Controller
             'user_id'=>auth()->user()->id,
             'totalprice'=>$totalPrice
         ]);
+
         foreach($data['products'] as $productData){
             $product=Product::findOrFail($productData['product_id']);
             $order->products()->attach($product, [
@@ -33,8 +35,7 @@ class OrderController extends Controller
             ]);
         }
 
-        return $this->apiResponse('Order Added Successfully');
-
+        return $this->apiResponse(new OrderResource($order),'Order Added Successfully');
 
     }
 }

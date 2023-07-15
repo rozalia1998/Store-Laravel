@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 class User extends Authenticatable
@@ -25,15 +26,19 @@ class User extends Authenticatable
         'password',
     ];
 
-    public function roles(): HasMany{
+    public function roles(): BelongsToMany{
 
-        return $this->hasMany(Role::class,'user_roles');
+        return $this->BelongsToMany(Role::class,'user_roles');
 
     }
 
     public function hasRole($rolename)
     {
         return $this->roles->contains('name', $rolename);
+    }
+
+    public function reviews(): hasMany{
+        return $this->hasMany(Review::class);
     }
 
     /**

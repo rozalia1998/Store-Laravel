@@ -59,7 +59,7 @@ class ProductController extends Controller
             'subcat_id'=>$request->subcat_id
         ]);
 
-        return $this->SuccessResponse('Added product successfully');
+        return $this->apiResponse(new ProductResource($product) ,'Added product successfully');
     }
 
     /**

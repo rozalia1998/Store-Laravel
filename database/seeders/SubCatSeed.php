@@ -16,7 +16,7 @@ class SubCatSeed extends Seeder
      */
     public function run()
     {
-        SubCategory::create([[
+        SubCategory::insert([[
             'category_id'=>'2',
             'name'=>'Laptops'
         ],[

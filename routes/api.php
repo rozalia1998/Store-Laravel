@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserRoleController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ReviewController;
 use App\Http\Middleware\CheckMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 
@@ -38,6 +39,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/products/search/{id}',[ProductController::class, 'search']);
     Route::post('/products/filterprice',[ProductController::class, 'FilterPrice']);
     Route::post('/order/addOrder',[OrderController::class, 'addOrder']);
+    Route::post('/Review/add/{id}',[ReviewController::class, 'addReview']);
+    Route::get('/Review/view/{id}',[ReviewController::class, 'showProductRev']);
+    Route::get('/Review/viewOrdered/{id}',[ReviewController::class, 'ordered']);
+    Route::get('/Review/orderAll',[ReviewController::class, 'orderAll']);
     Route::prefix('admin')->middleware('admin')->group(function (){
         Route::post('/role/create',[RoleController::class, 'addRole']);
         Route::post('/userroles/add/{uid}/{rid}',[UserRoleController::class, 'addUserRole']);
