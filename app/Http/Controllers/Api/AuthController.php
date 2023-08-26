@@ -9,6 +9,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Jobs\MakeStatus;
 
 class AuthController extends Controller
 {
@@ -41,5 +42,20 @@ class AuthController extends Controller
     public function logout(){
         auth()->user()->currentAccessToken()->delete();
         return $this->SuccessResponse('user logged out');
+     }
+
+     public function changeStatus(){
+        //Request $request, changeStatus::dispatch($request)->delay(now()->second(30));
+
+        MakeStatus::dispatch();
+        return 'action is processed';
+     }
+
+     public function notificate(){
+        $user=Auth::user();
+
+        $res=$user->notifications;
+
+        return $this->apiResponse($res,'Notification');
      }
 }

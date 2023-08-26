@@ -30,10 +30,11 @@ class ProductRequest extends FormRequest
             'in_stock' => 'nullable|boolean',
             'category_id' => 'required|exists:categories,id',
             'subcat_id' => 'required|exists:sub_categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            // 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'images.*' =>'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ];
     }
-
+    // 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
     public function all($keys = null)
     {
         $data = parent::all($keys);

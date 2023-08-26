@@ -27,6 +27,7 @@ class OrderRequest extends FormRequest
             'products' => 'required|array|min:1',
             'products.*.product_id' => 'required|numeric|exists:products,id',
             'products.*.quantity' => 'required|numeric|min:1',
+            'coupon_code'=>'string|nullable',
         ];
     }
 }

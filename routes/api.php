@@ -9,8 +9,9 @@ use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserRoleController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\ForgotPasswordController;
+use App\Http\Controllers\Api\ResetPassController;
 use App\Http\Middleware\CheckMiddleware;
-use App\Http\Middleware\AdminMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,10 +29,11 @@ use App\Http\Middleware\AdminMiddleware;
 // });
 Route::post('/register',[AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login'])->name('login');
-
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink']);
+Route::post('/reset-password', [ResetPassController::class, 'reset']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::apiResource('products', ProductController::class);
     Route::post('/logout',[AuthController::class, 'logout']);
+    Route::get('/notificate',[AuthController::class, 'notificate']);
     Route::put('/users/update',[UserController::class, 'update']);
     Route::delete('/users/delete',[UserController::class, 'destroy']);
     Route::get('/products',[ProductController::class, 'index']);
@@ -43,7 +45,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/Review/view/{id}',[ReviewController::class, 'showProductRev']);
     Route::get('/Review/viewOrdered/{id}',[ReviewController::class, 'ordered']);
     Route::get('/Review/orderAll',[ReviewController::class, 'orderAll']);
-    Route::prefix('admin')->middleware('admin')->group(function (){
+    Route::put('/Review/updateReview/{rid}/product/{pid}',[ReviewController::class, 'updateReview']);
+    Route::delete('/Review/deleteReview/{rid}/product/{pid}',[ReviewController::class, 'deleteReview']);
+    Route::prefix('admin')->middleware('check:admin')->group(function (){
         Route::post('/role/create',[RoleController::class, 'addRole']);
         Route::post('/userroles/add/{uid}/{rid}',[UserRoleController::class, 'addUserRole']);
         Route::delete('/userroles/delete/{uid}/{rid}',[UserRoleController::class, 'deleteUserRole']);

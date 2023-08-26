@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Coupon;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
@@ -18,9 +19,13 @@ class OrderController extends Controller
     public function addOrder(OrderRequest $request){
         $data=$request->validated();
         $totalPrice = 0;
+        $res = Coupon::where('code', $data['coupon_code'])->first();
         foreach ($data['products'] as $productData) {
             $product = Product::findOrFail($productData['product_id']);
             $totalPrice += $productData['quantity'] * $product->price;
+        }
+        if($res){
+            $totalPrice *=$res->discount;
         }
         $order=Order::create([
             'user_id'=>auth()->user()->id,

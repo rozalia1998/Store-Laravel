@@ -1,15 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Facades\Notification;
 use App\Models\SubCategory;
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\User;
+use App\Models\Image;
+use App\Notifications\NewProductNotification;
 
 class ProductController extends Controller
 {
@@ -43,21 +46,27 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $imagePath = null;
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imagePath = $image->store('public/images');
-        }
         $product=Product::create([
             'name'=>$request->name,
             'description'=>$request->description,
             'price'=>$request->price,
-            'img_url'=>$imagePath,
             'in_stock'=>$request->in_stock,
             'category_id'=>$request->category_id,
             'subcat_id'=>$request->subcat_id
         ]);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $im){
+                $imagePath =$im->store('public/images');
+                $image = new Image();
+                $image->path = $imagePath;
+                $product->images()->save($image);
+            }
+        }
+
+
+        $users=User::where('id','!=',Auth::id())->get();
+        Notification::send($users,new NewProductNotification($product->id));
 
         return $this->apiResponse(new ProductResource($product) ,'Added product successfully');
     }
@@ -82,7 +91,9 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        //Spaty Permission and Spaty Media packages
+
+        //policies and gets for authorization //soldid principles
     }
 
     /**
@@ -95,7 +106,6 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product=Product::findOrFail($id);
-
         $res=$product->update([
             'name'=>$request->name ?? $product->name,
             'description'=>$request->description ?? $product->description,
@@ -134,5 +144,6 @@ class ProductController extends Controller
         $product=Product::where('price','>',$request->min)->where('price','<',$request->max)->get();
         return $this->apiResponse($product,'Filter About Price',200);
     }
+
 
 }

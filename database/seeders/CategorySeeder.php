@@ -20,6 +20,5 @@ class CategorySeeder extends Seeder
             ['name'=>'Shoes']
         ]);
 
-
     }
 }

@@ -20,10 +20,10 @@ class CheckMiddleware
     public function handle(Request $request, Closure $next,...$role)
     {
 
-        if (auth()->user()->hasRole($role)) {
+        if (auth()->user()->hasRole(...$role)) {
             return $next($request);
         } else {
-            return response()->json(['message' => 'You do not have the required role: '], 403);
+            return response()->json(['message' => 'You do not have the required role: ' . implode(', ', $role)], 403);
         }
     }
 }

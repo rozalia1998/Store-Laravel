@@ -24,4 +24,5 @@ Trait ApiResponse{
             'message'=>$message,
         ],$code);
     }
+
 }

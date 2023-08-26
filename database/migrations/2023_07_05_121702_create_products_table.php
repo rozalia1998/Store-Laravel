@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->double('price');
-            $table->string('img_url')->nullable();
             $table->boolean('in_stock')->default(true);
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
             $table->foreignId('subcat_id')->constrained('sub_categories')->cascadeOnDelete();

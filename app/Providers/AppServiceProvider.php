@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Order;
 use Illuminate\Support\ServiceProvider;
 use App\Observers\OrderObserver;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -24,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Order::observe(OrderObserver::class);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+// use Carbon\Carbon;
 
 class ReviewResource extends JsonResource
 {
@@ -14,10 +15,13 @@ class ReviewResource extends JsonResource
      */
     public function toArray($request)
     {
+        $timepassed=$this->created_at->diffForHumans();
+
         return [
             'username'=>$this->user->name,
             'rate'=>$this->rate,
-            'comment'=>$this->comment
+            'comment'=>$this->comment,
+            'added_since'=>$timepassed
         ];
     }
 }
